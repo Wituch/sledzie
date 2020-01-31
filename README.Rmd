@@ -6,6 +6,7 @@ output:
   html_document:
     toc: true
     toc_depth: 2
+    keep_md: true
 ---
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
