@@ -2,11 +2,12 @@
 title: "Raport - śledzie oceaniczne"
 author: "Wojciech Agaciński"
 date: "31.01.2020"
+always_allow_html: yes
 output:
-  html_document:
+  md_document:
     toc: true
     toc_depth: 2
-    keep_md: true
+    variant: markdown_github
 ---
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -34,11 +35,11 @@ Celem niniejszego projektu jest analiza danych o połowach śledzi oceanicznych 
 # Podsumowanie i wnioski
 
 ## Wnioski
-Analiza danych zawarta w projekcie wykazała, że za karłowacenie śledzi na przestrzeni lat odpowiadają przede wszystkim wzrost temperatury wody oraz spadek ilości narybku. Można pokusić się o wskazanie wzrostu połowów (wynikających z większego popytu na ryby) oraz zjawiska globalnego ocieplenia jako główne czynniki powodujące obserwowane zjawisko.
+Analiza danych zawarta w projekcie wykazała, że za karłowacenie śledzi na przestrzeni lat odpowiadają przede wszystkim wzrost temperatury wody oraz dostępność niektórych odmian planktonu. 
 
 ## Obserwacje
 
-Analizowany zbiór danych posiadał pewien istotny mankament - rekordy nie posiadały szczegółowej informacji na temat daty wykonania pomiaru. Jest to o tyle problematyczne, iż nie można w łatwy sposób przyporządkować danego rekordu do roku. Wprowadza to szereg utrudnień, m. in z wyznaczeniem wykresu rozmiaru od roku, czy też w ogólności grupowane rekordów według daty.
+Analizowany zbiór danych posiadał pewien istotny mankament - rekordy nie posiadały szczegółowej informacji na temat daty wykonania pomiaru. Jest to o tyle problematyczne, ponieważ nie można w łatwy sposób przyporządkować danego rekordu do roku. Wprowadza to szereg utrudnień, m. in. z wyznaczeniem wykresu rozmiaru śledzia od roku, czy też w ogólności grupowane rekordów według daty.
 
 # Wykorzystanie narzędzia
 
@@ -65,19 +66,21 @@ print(paste("Liczba kolumn: ", ncol(flatData)))
 ### Nagłówki kolumn i kilka przykładowych wierszy zaprezentowane poniżej.
 
 ```{r, echo=FALSE}
-knitr::kable(head(flatData))
+headOfData <-head(flatData)
+knitr::kable(headOfData)
 
 ```
 
 ### Podstawowe metryki zbioru danych.
 
 ```{r, echo=FALSE}
-knitr::kable(summary(flatData))
+summaryOfData <- summary(flatData)
+knitr::kable(summaryOfData)
 
 ```
 
 ## Rozkłady zmiennych
-Poniżej zaprezentowane są histogramy wszystkich obecnych zmiennych w danych.
+Poniżej zaprezentowane są histogramy wszystkich obecnych zmiennych w zbiorze danych.
 
 ### Długość złowionego śledzia [cm] - length
 ```{r, echo=FALSE, warning=FALSE}
@@ -242,6 +245,5 @@ importance<- varImp(rfModel, scale = FALSE)
 plot(importance, top=10)
 ```
 
-Jak widać najbardziej istotne cechy to: temperatura przy powierzchni wody oraz roczny narybek. O ile miesiąc połowu ma bardzo duże znaczenie w regresji, to dla naszej analizy danych na przestrzeni lat nie ma on znaczenia.
-
+Jak widać najbardziej istotne cechy to: temperatura przy powierzchni wody, oraz w mniejszym stopnu zagęszczenie widłonogów gat. 1 i zagęszczenie Calanus helgolandicus gat. 2. O ile miesiąc połowu ma bardzo duże znaczenie w kontekście wyników regresji, to dla naszej analizy danych na przestrzeni lat nie ma on znaczenia. 
 
