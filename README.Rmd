@@ -209,15 +209,15 @@ lmModel
 ## Random Forest
 
 ```{r, echo=FALSE}
-#rfModel <- train(length ~ ., data = training, method = "rf", trControl = ctrl, tuneGrid = data.frame(mtry = 8))
-#rfModel
+rfModel <- train(length ~ ., data = training, method = "rf", trControl = ctrl, tuneGrid = data.frame(mtry = 8))
+rfModel
 ```
 
 ## SVM
 
 ```{r, echo=FALSE}
-#svmModel <- train(length ~ ., data = training, method = "svmLinear", trControl = ctrl)
-#svmModel
+svmModel <- train(length ~ ., data = training, method = "svmLinear", trControl = ctrl)
+svmModel
 ```
 
 ## Porównanie efektywności modeli
@@ -225,9 +225,8 @@ lmModel
 Porównanie wybranych modeli pod kątem metryk R2, RMSE i MAE wskazuje, iż najlepszym z nich jest model Random Forest.
 
 ```{r, echo=FALSE}
-#results <- resamples(list(LM=lmModel, SVM=svmModel))
-#knitr::kable(summary(results))
-#results <- resamples(list(LM=lmModel, SVM=svmModel, RF=rfModel))
+results <- resamples(list(LM=lmModel, SVM=svmModel, RF=rfModel))
+summary(results)
 ```
 
 # Analiza wyników modeli
