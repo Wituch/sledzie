@@ -24,7 +24,7 @@ data <- read.csv("sledzie.csv", sep=',')
 data[data=="?"] <- NA
 data <- drop_na(data)
 flatData <- mutate_all(data, function(x) as.numeric(as.character(x)))
-colVect <- c(2:	16)
+colVect <- c(2:16)
 flatData <- select(flatData, colVect)
 ```
 # Cel projektu
@@ -194,7 +194,7 @@ Z powyższego wykresu korelacji można wyciągnąć kilka wniosków.Interesuje n
 # Predykcja
 
 ```{r, echo=FALSE}
-inTraining <- createDataPartition( y = flatData[,2],p = .7, list = FALSE)
+inTraining <- createDataPartition( y = flatData[,1],p = .7, list = FALSE)
 training <- flatData[ inTraining,]
 testing  <- flatData[-inTraining,]
 ctrl <- trainControl(method = "repeatedcv", number = 2, repeats = 5)
