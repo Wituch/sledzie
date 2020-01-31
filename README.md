@@ -147,6 +147,8 @@ zbiorze danych.
 
 ### Roczny narybek \[liczba śledzi\] - recr
 
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
 ![](README_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
 ### Łączne roczne natężenie połowów w regionie \[ułamek pozostawionego narybku\] - cumf
@@ -154,6 +156,8 @@ zbiorze danych.
 ![](README_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
 ### Łączna liczba ryb złowionych w ramach połowu \[liczba śledzi\] - totaln
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](README_files/figure-markdown_github/unnamed-chunk-16-1.png)
 
@@ -195,14 +199,14 @@ czytelności, zostały ukryte powtarzające się w macierzy wartości.
 
 ![](README_files/figure-markdown_github/unnamed-chunk-22-1.png)
 
-Z powyższego wykresu korelacji można wyciągnąć kilka wniosków.Interesuje
-nas szczególnie korelacja z zmiennych z długością śledzi. Dodatnią
-korelację w pewnym stopniu wykazuje: zagęszczenie Calanus helgolandicus
-gat.1, zagęszczenie widłonogów gat. 1 oraz ułamek pozostawionego
-narybku. Jeśli chodzi o korelację ujemną, bardzo silnie skorelowana jest
-temperatura przy powierzchni wody oraz w niewielkim stopniu oscylacja
-północnoatlantycka. Wymienione powyżej zmienne warto brać pod uwagę przy
-analizie przyczyny karłowacenia.
+Z powyższego wykresu korelacji można wyciągnąć kilka wniosków.
+Interesuje nas szczególnie korelacja z zmiennych z długością śledzi.
+Dodatnią korelację w pewnym stopniu wykazuje: zagęszczenie Calanus
+helgolandicus gat.1, zagęszczenie widłonogów gat. 1 oraz ułamek
+pozostawionego narybku. Jeśli chodzi o korelację ujemną, bardzo silnie
+skorelowana jest temperatura przy powierzchni wody oraz w niewielkim
+stopniu oscylacja północnoatlantycka. Wymienione powyżej zmienne warto
+brać pod uwagę przy analizie przyczyny karłowacenia.
 
 Predykcja
 =========

@@ -133,7 +133,7 @@ ggplot(flatData, aes(x = fbar)) + geom_histogram(binwidth = .5) + geom_vline(aes
 ### Roczny narybek [liczba śledzi] - recr
 ```{r, echo=FALSE, warning=FALSE}
 
-ggplot(flatData, aes(x = recr)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(recr, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+ggplot(flatData, aes(x = recr)) + geom_histogram() + geom_vline(aes(xintercept = mean(recr, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
 ```
 
 ### Łączne roczne natężenie połowów w regionie [ułamek pozostawionego narybku] - cumf
@@ -145,7 +145,7 @@ ggplot(flatData, aes(x = cumf)) + geom_histogram(binwidth = .5) + geom_vline(aes
 ### Łączna liczba ryb złowionych w ramach połowu [liczba śledzi] - totaln
 ```{r, echo=FALSE, warning=FALSE}
 
-ggplot(flatData, aes(x = totaln)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(totaln, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+ggplot(flatData, aes(x = totaln)) + geom_histogram() + geom_vline(aes(xintercept = mean(totaln, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
 ```
 
 ### Temperatura przy powierzchni wody [°C] - sst
@@ -192,7 +192,7 @@ corrplot(correlationData, method="circle", type="upper")
 
 ```
 
-Z powyższego wykresu korelacji można wyciągnąć kilka wniosków.Interesuje nas szczególnie korelacja z zmiennych z długością śledzi. Dodatnią korelację w pewnym stopniu wykazuje: zagęszczenie Calanus helgolandicus gat.1, zagęszczenie widłonogów gat. 1 oraz ułamek pozostawionego narybku. Jeśli chodzi o korelację ujemną, bardzo silnie skorelowana jest temperatura przy powierzchni wody oraz w niewielkim stopniu oscylacja północnoatlantycka. Wymienione powyżej zmienne warto brać pod uwagę przy analizie przyczyny karłowacenia.
+Z powyższego wykresu korelacji można wyciągnąć kilka wniosków. Interesuje nas szczególnie korelacja z zmiennych z długością śledzi. Dodatnią korelację w pewnym stopniu wykazuje: zagęszczenie Calanus helgolandicus gat.1, zagęszczenie widłonogów gat. 1 oraz ułamek pozostawionego narybku. Jeśli chodzi o korelację ujemną, bardzo silnie skorelowana jest temperatura przy powierzchni wody oraz w niewielkim stopniu oscylacja północnoatlantycka. Wymienione powyżej zmienne warto brać pod uwagę przy analizie przyczyny karłowacenia.
 
 # Predykcja
 
