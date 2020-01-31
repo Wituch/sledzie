@@ -1,0 +1,243 @@
+---
+title: "Raport - śledzie oceaniczne"
+author: "Wojciech Agaciński"
+date: "24 01 2020"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyr)
+library(corrplot)
+library(bazar)
+library(knitr)
+library(ggplot2)
+library(caret)
+library(dplyr)
+library(mlbench)
+set.seed(6)
+data <- read.csv("C:/Users/Wojciech/Desktop/Project/sledzie.csv", sep=',') 
+data[data=="?"]<-NA
+data <- drop_na(data)
+flatData <- mutate_all(data,function(x) as.numeric(as.character(x)))
+```
+# Cel projektu
+
+Celem niniejszego projektu jest analiza danych o połowach śledzi oceanicznych wyławianych w Europie z ostatnich 60 lat. Analiza danych ma wskazać główne przyczyny zjawiska stopniowego karłowacenia tych śledzi na przestrzeni lat.
+
+# Podsumowanie i wnioski
+
+## Wnioski
+Analiza danych zawarta w projekcie wykazała, że za karłowacenie śledzi na przestrzeni lat, odpowiadają przede wszystkim intesywne połowy oraz wzrost temperatury wody. Można pokusić się o wskazanie wzrostu liczby ludności (a przy tym popytu na ryby) oraz globalnego ocieplenia jako główne czynniki powodujące obserwowane zjawisko
+
+## Obserwacje
+
+Analizowany zbiór danych posiadał pewien istotny mankament - rekord nie posiadały szczegółowej informacji na temat daty wykonania pomiaru. Jest to o tyle problematyczne, iż nie można w łatwy sposób przyporządkować dany rekord do roku. Wprowadza to szereg utrudnień, m. in z wyznaczeniem wykresu rozmiaru od roku, czy też w ogólności grupowane rekordów według daty.
+
+# Wykorzystanie narzędzia
+
+W ramach analizy danych w niniejszym projekcie zostały wykorzystane następujące pakiety:
+```{r, echo=FALSE, warning=FALSE}
+packages <- sessionPackages()$otherPkgs
+knitr::kable(packages, col.names = NULL)
+
+```
+
+# Informacje na temat zbioru danych
+
+Niniejsza sekcja poświęcona jest podstawowym informacjom odnosnie analizowanego zbioru danych.
+
+## Podstawowe informacje
+Zbiór danych przed dalszą anlizą został oczyszczony z brakujących danych - rekordy zawierające puste kolumny zostały usunięte ze zbioru. Poniżej znajdują się informacje odnośnie oczyszczonego zbioru danych.
+
+```{r, echo=FALSE}
+print(paste("Liczba wierszy: ", nrow(data)))
+print(paste("Liczba kolumn: ", ncol(data)))
+```
+
+### Nagłówki kolumn i kilka przykładowych wierszy zaprezentowane poniżej.
+
+```{r, echo=FALSE}
+knitr::kable(head(data))
+
+```
+
+### Podstawowe metryki zbioru danych.
+
+```{r, echo=FALSE}
+knitr::kable(summary(data))
+
+```
+
+## Rozkłady zmiennych
+Poniżej zaprezentowane są histogramy wszystkich obecnych zmiennych w danych (z wyłączeniem kolumny pełniącej funkcję porządkową).
+
+### Długość złowionego śledzia [cm] - length
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = length)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(length, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Dostępność planktonu [zagęszczenie Calanus finmarchicus gat. 1] - cfin1
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = cfin1)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(cfin1, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Dostępność planktonu [zagęszczenie Calanus finmarchicus gat. 2] - cfin2
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = cfin2)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(cfin2, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Dostępność planktonu [zagęszczenie Calanus helgolandicus gat. 1] - chel1
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = chel1)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(chel1, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Dostępność planktonu [zagęszczenie Calanus helgolandicus gat. 2] - chel2
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = chel2)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(chel2, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Dostępność planktonu [zagęszczenie widłonogów gat. 1] - lcop1
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = lcop1)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(lcop1, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Dostępność planktonu [zagęszczenie widłonogów gat. 2] - lcop2
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = lcop2)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(lcop2, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Natężenie połowów w regionie [ułamek pozostawionego narybku] - fbar
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = fbar)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(fbar, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Roczny narybek [liczba śledzi] - recr
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = recr)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(recr, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Łączne roczne natężenie połowów w regionie [ułamek pozostawionego narybku] - cumf
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = cumf)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(cumf, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Łączna liczba ryb złowionych w ramach połowu [liczba śledzi] - totaln
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = totaln)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(totaln, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Temperatura przy powierzchni wody [°C] - sst
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = sst)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(sst, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Poziom zasolenia wody [Knudsen ppt] - sal
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = sal)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(sal, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Miesiąc połowu [numer miesiąca] - xmonth
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = xmonth)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(xmonth, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+```
+
+### Oscylacja północnoatlantycka [mb] - nao
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(flatData, aes(x = nao)) + geom_histogram(binwidth = .5) + geom_vline(aes(xintercept = mean(nao, na.rm = T)), colour = "red", linetype ="longdash", size = .8)
+
+```
+
+# Analiza danych
+
+## Postęp zjawiska karłowacenia śledzi
+Aby potwierdzić zjawisko karłowacenia śledzi, należy sporządzić wykres zmiany długości złowionych osobników w czasie. Na wykresie dosyć wyraźnie jest zaznaczony stopniowy spadek rozmiaru śledzia. Z uwagi na chronologiczne uporządkowanie rekordów oraz brak znaczników czasowych, jako oś czasu została wykorzystana zmienna porządkowa - "X".
+
+```{r, echo=FALSE}
+ggplot(data, aes(x=X, y = length)) +geom_line()
+```
+
+## Korelacja zmiennych
+
+Wykres korelacji zmiennych znajduje się poniżej. W celu zwiększenia czytelności, zostały ukryte powtarzające się w macierzy wartości.
+
+```{r, echo=FALSE}
+correlationData <- cor(flatData)
+corrplot(correlationData, method="circle", type="upper")
+
+```
+
+Z powyższego wykresu korelacji można wyciągnąć kilka wniosków.Interesuje nas szczególnie korelacja z zmiennych z długością śledzi. Dodatnią korelację w pewnym stopniu wykazuje: zagęszczenie Calanus helgolandicus gat.1, zagęszczenie widłonogów gat. 1 oraz ułamek pozostawionego narybku. Jeśli chodzi o korelację ujemną, bardzo silnie skorelowana jest temperatura przy powierzchni wody oraz w niewielkim stopniu oscylacja północnoatlantycka. Wymienione powyżej zmienne warto brać pod uwagę przy analizie przyczyny karłowacenia.
+
+# Predykcja
+
+```{r, echo=FALSE}
+inTraining <- createDataPartition( y = flatData[,2],p = .7, list = FALSE)
+training <- flatData[ inTraining,]
+testing  <- flatData[-inTraining,]
+ctrl <- trainControl(method = "repeatedcv", number = 2, repeats = 5)
+```
+
+Aby zapewnić zadowalające wyniki analizy, zostały stworzone, wytrenowane i przetestowane trzy modele regresji dostępne w bibliotece caret, opierające się na różnych algorytmach: Linear Regression, Random Forest oraz SVM. Poniżej znajdą się efekty trenowania poszczególnych modeli.
+
+## Linear Regression
+
+```{r, echo=FALSE}
+lmModel <- train(length ~ ., data = training, method = "lm", trControl = ctrl)
+lmModel
+
+```
+
+## Random Forest
+
+```{r, echo=FALSE}
+#rfModel <- train(length ~ ., data = training, method = "rf", trControl = ctrl, tuneGrid = data.frame(mtry = 8))
+#rfModel
+```
+
+## SVM
+
+```{r, echo=FALSE}
+#svmModel <- train(length ~ ., data = training, method = "svmLinear", trControl = ctrl)
+#svmModel
+```
+
+## Porównanie efektywności modeli
+
+Porównanie wybranych modeli pod kątem metryk R2, RMSE i MAE wskazuje, iż najlepszym z nich jest model Random Forest.
+
+```{r, echo=FALSE}
+#results <- resamples(list(LM=lmModel, SVM=svmModel))
+#knitr::kable(summary(results))
+#results <- resamples(list(LM=lmModel, SVM=svmModel, RF=rfModel))
+```
+
+# Analiza wyników modeli
+
+W celu poznania przyczyny karłowacenia śledzi z dostępnych danych, zostałe one oczyszczone oraz przeanalizowane za pomocą modelu regresji. Poniżej prezentuje się rezultat wytrenowania i uruchomienia najlepszego modelu (Random Forest), zawierający najbardziej znaczące cechy w kontekście przewidywania długości śledzi.
+
+```{r, echo=FALSE}
+importance<- varImp(lmModel, scale = FALSE)
+plot(importance, top=10)
+```
+
+Jak widać najbardziej istotne cechy to: natężenie połowów w regionie, łączne roczne natężenie połowów w regionie oraz temperatura przy powierzchni wody. Zmienną "X" celowo pomijam, ponieważ jes to tylko liczba porządkowa, niezwiązana realnie z danymi.
+
+
